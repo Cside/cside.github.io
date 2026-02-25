@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>時間から歩数計算</title>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f9f9f9; /* 背景色 */
+        }
+
+        .converter-container {
+            display: flex;
+            align-items: center;
+            font-size: 24px; /* 文字サイズ */
+            gap: 12px; /* 各要素の間隔 */
+        }
+
+        input[type="number"] {
+            width: 80px;
+            height: 50px;
+            font-size: 24px;
+            text-align: center;
+            border: 1px solid #333;
+            border-radius: 0; /* 四角い枠 */
+            background-color: #fff;
+        }
+
+        /* 矢印のデザイン */
+        .arrow {
+            font-size: 24px;
+            margin: 0 10px;
+        }
+
+        /* 計算結果の数字部分 */
+        #result {
+            font-weight: bold;
+            min-width: 50px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="converter-container">
+        <!-- 分の入力 -->
+        <input type="number" id="minutes" placeholder="" min="0">
+        <span>分</span>
+
+        <!-- 秒の入力 -->
+        <input type="number" id="seconds" placeholder="" min="0">
+        <span>秒</span>
+
+        <!-- 矢印 -->
+        <span class="arrow">▶</span>
+
+        <!-- 結果表示 -->
+        <span id="result">0</span>
+        <span>歩</span>
+    </div>
+
+    <script>
+        // 要素の取得
+        const minutesInput = document.getElementById('minutes');
+        const secondsInput = document.getElementById('seconds');
+        const resultSpan = document.getElementById('result');
+
+        // 計算ロジック
+        // 14分40秒 = 880秒
+        // 2500歩 / 880秒 = 1秒あたりの歩数 (約2.8409歩/秒)
+        const STEPS_PER_SECOND = 2500 / ((14 * 60) + 40);
+
+        function calculateSteps() {
+            // 入力値を取得（空の場合は0として扱う）
+            const minutes = parseInt(minutesInput.value) || 0;
+            const seconds = parseInt(secondsInput.value) || 0;
+
+            // 総秒数を計算
+            const totalSeconds = (minutes * 60) + seconds;
+
+            // 歩数を計算して四捨五入
+            const steps = Math.round(totalSeconds * STEPS_PER_SECOND);
+
+            // 結果を表示
+            resultSpan.textContent = steps;
+        }
+
+        // 入力時に即座に計算を実行するイベントリスナー
+        minutesInput.addEventListener('input', calculateSteps);
+        secondsInput.addEventListener('input', calculateSteps);
+    </script>
+</body>
+</html>
